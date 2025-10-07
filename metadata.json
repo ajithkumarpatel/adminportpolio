@@ -1,5 +1,5 @@
 {
-  "name": "Copy of Portfolio Admin Panel",
-  "description": "A standalone, password-protected admin page to view contact messages submitted through the portfolio website, built with React, TypeScript, and Firebase.",
+  "name": "Copy of Copy of Ajith's Personal Portfolio & Admin Panel",
+  "description": "A modern, fully functional personal portfolio website for Ajith, built with React, TypeScript, and Tailwind CSS. It features sections for about, skills, projects, experience, a Gemini AI-powered chat, and a contact form integrated with Firebase. A standalone, password-protected admin page is included to view contact messages.",
   "requestFramePermissions": []
 }

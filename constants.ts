@@ -1,7 +1,9 @@
 import type { Project, Experience, SkillCategory, Certification } from './types';
 import { 
     GithubIcon, 
-    LinkedinIcon, 
+    LinkedinIcon,
+    FacebookIcon,
+    InstagramIcon,
     PythonIcon,
     JavaIcon,
     CppIcon,
@@ -42,7 +44,9 @@ export const USER_INFO = {
   email: 'ajith.kumar.dev@example.com',
   socials: [
     { name: 'GitHub', url: 'https://github.com', icon: GithubIcon },
-    { name: 'LinkedIn', url: 'https://linkedin.com', icon: LinkedinIcon },
+    { name: 'LinkedIn', url: 'https://www.linkedin.com/in/ajith-kumar-rayeeshetti-8196352a5', icon: LinkedinIcon },
+    { name: 'Instagram', url: 'https://www.instagram.com/ajith_patel__03', icon: InstagramIcon },
+    { name: 'Facebook', url: 'https://www.facebook.com/share/1B7ieoMtKa/', icon: FacebookIcon },
   ]
 };
 
@@ -89,17 +93,57 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
 
 export const PROJECTS: Project[] = [
   {
-    title: 'Portal Website',
-    description: 'A comprehensive portal website with various features and functionalities.',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
-    tags: ['TypeScript', 'React', 'Node.js'],
+    title: 'Scientific Calculator',
+    description: 'A web-based scientific calculator with advanced mathematical functions, built with HTML, CSS, and JavaScript.',
+    image: 'https://placehold.co/600x400/1F2937/9CA3AF/png?text=Scientific+Calculator',
+    tags: ['HTML', 'CSS', 'JavaScript'],
+    githubUrl: 'https://github.com',
+    liveUrl: 'https://example.com',
+  },
+  {
+    title: 'Tic-Tac-Toe Game',
+    description: 'A classic Tic-Tac-Toe game playable in the browser, featuring a clean UI and win/draw detection logic.',
+    image: 'https://placehold.co/600x400/1F2937/9CA3AF/png?text=Tic-Tac-Toe',
+    tags: ['HTML', 'CSS', 'JavaScript'],
+    githubUrl: 'https://github.com',
+    liveUrl: 'https://example.com',
+  },
+  {
+    title: 'Personal Blog',
+    description: 'A personal blog site built with Astro, designed for performance and showcasing articles and thoughts.',
+    image: 'https://placehold.co/600x400/1F2937/9CA3AF/png?text=Personal+Blog',
+    tags: ['Astro', 'Markdown', 'CSS'],
+    githubUrl: 'https://github.com',
+    liveUrl: 'https://example.com',
+  },
+  {
+    title: 'SecureSign System',
+    description: 'A secure user authentication and sign-in system, demonstrating best practices in web security.',
+    image: 'https://placehold.co/600x400/1F2937/9CA3AF/png?text=SecureSign+System',
+    tags: ['HTML', 'JavaScript', 'Security'],
+    githubUrl: 'https://github.com',
+    liveUrl: 'https://example.com',
+  },
+  {
+    title: 'File Uploader',
+    description: 'A simple file upload interface with client-side validation for file type/size and preview functionality.',
+    image: 'https://placehold.co/600x400/1F2937/9CA3AF/png?text=File+Uploader',
+    tags: ['HTML', 'CSS', 'JavaScript'],
+    githubUrl: 'https://github.com',
+    liveUrl: 'https://example.com',
+  },
+  {
+    title: 'Full-Stack Portal Website',
+    description: 'A feature-rich portal with user authentication, a dynamic dashboard, and content management. Built with the MERN stack (MongoDB, Express, React, Node.js) and secured with JWT for authentication.',
+    image: 'https://placehold.co/600x400/1F2937/9CA3AF/png?text=Portal+Website',
+    tags: ['React', 'Node.js', 'Express', 'MongoDB', 'JWT', 'TypeScript'],
     githubUrl: 'https://github.com',
     liveUrl: 'https://example.com',
   },
   {
     title: 'Student Tracker App',
     description: 'A web application for tracking student information and progress.',
-    image: 'https://images.unsplash.com/photo-1516321497487-e288fb19713f?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
+    image: 'https://placehold.co/600x400/1F2937/9CA3AF/png?text=Student+Tracker',
     tags: ['HTML', 'CSS', 'JavaScript'],
     githubUrl: 'https://github.com',
     liveUrl: 'https://example.com',
@@ -107,7 +151,7 @@ export const PROJECTS: Project[] = [
   {
     title: 'Secret Code Generator',
     description: 'A Python script to generate and manage secret codes.',
-    image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
+    image: 'https://placehold.co/600x400/1F2937/9CA3AF/png?text=Code+Generator',
     tags: ['Python'],
     githubUrl: 'https://github.com',
     liveUrl: 'https://example.com',
@@ -115,7 +159,7 @@ export const PROJECTS: Project[] = [
    {
     title: 'Command Line To-Do List Manager',
     description: 'A comprehensive command-line todo list manager built with Python, featuring task creation, management, and filtering.',
-    image: 'https://images.unsplash.com/photo-1583089822416-c5f159640985?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
+    image: 'https://placehold.co/600x400/1F2937/9CA3AF/png?text=To-Do+Manager',
     tags: ['Python'],
     githubUrl: 'https://github.com',
     liveUrl: 'https://example.com',
@@ -123,7 +167,7 @@ export const PROJECTS: Project[] = [
    {
     title: 'Shift Booking App',
     description: 'An application for managing and booking shifts, built with TypeScript.',
-    image: 'https://images.unsplash.com/photo-1633613286848-e6f43bbaf5a2?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
+    image: 'https://placehold.co/600x400/1F2937/9CA3AF/png?text=Shift+Booking+App',
     tags: ['TypeScript', 'React Native'],
     githubUrl: 'https://github.com',
     liveUrl: 'https://example.com',
@@ -131,7 +175,7 @@ export const PROJECTS: Project[] = [
    {
     title: 'Bank Management System',
     description: 'A system for managing bank accounts and transactions, developed in Python.',
-    image: 'https://images.unsplash.com/photo-1579621970795-87f54f597ba7?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
+    image: 'https://placehold.co/600x400/1F2937/9CA3AF/png?text=Bank+System',
     tags: ['Python', 'SQL'],
     githubUrl: 'https://github.com',
     liveUrl: 'https://example.com',
@@ -152,19 +196,54 @@ export const EXPERIENCES: Experience[] = [
   {
     role: 'Cybersecurity Analyst Intern (Virtual)',
     company: 'Deloitte Australia',
-    duration: 'June 2025',
+    duration: 'June 2024 - July 2024',
     description: [
-      'Analyzed logs and detected anomalies, enhancing understanding of technical systems and debugging workflows.',
-      'Applied structured problem-solving and collaborated with teams to propose effective security measures.',
+        'Participated in threat modeling exercises and risk assessments for enterprise systems.',
+        'Analyzed security logs to identify potential vulnerabilities and incidents.',
+        'Contributed to the development of security policies and best practice documentation.',
     ],
   },
 ];
 
 export const CERTIFICATIONS: Certification[] = [
-    { name: 'Machine Learning I', issuer: 'Columbia+', url: 'https://example.com' },
-    { name: 'Python Essentials', issuer: 'Cisco Networking Academy & Reliance Foundation', url: 'https://example.com' },
-    { name: 'SQL (Basic & Intermediate)', issuer: 'HackerRank', url: 'https://example.com' },
-    { name: 'Web Development & REST APIs', issuer: 'Microsoft', url: 'https://example.com' },
-    { name: 'Python & MongoDB Fundamentals', issuer: 'SkillUp', url: 'https://example.com' },
-    { name: 'Cybersecurity Fundamentals', issuer: 'Tech Mahindra Foundation', url: 'https://example.com' },
+  {
+    name: 'AI & Machine Learning Professional Certificate',
+    issuer: 'IBM SkillsBuild',
+    url: '#',
+  },
+  {
+    name: 'Cybersecurity Virtual Experience Program',
+    issuer: 'Deloitte',
+    url: '#',
+  },
+  {
+    name: 'Machine Learning I',
+    issuer: 'Columbia+ (Non-credit, September 2025)',
+    url: '#',
+  },
+  {
+    name: 'Python Essentials',
+    issuer: 'Cisco Networking Academy & Reliance Foundation',
+    url: '#',
+  },
+  {
+    name: 'SQL (Basic & Intermediate)',
+    issuer: 'HackerRank',
+    url: '#',
+  },
+  {
+    name: 'Web Development & REST APIs',
+    issuer: 'Microsoft',
+    url: '#',
+  },
+  {
+    name: 'Python & MongoDB Fundamentals',
+    issuer: 'SkillUp',
+    url: '#',
+  },
+  {
+    name: 'Cybersecurity Fundamentals',
+    issuer: 'Tech Mahindra Foundation',
+    url: '#',
+  },
 ];

@@ -9,6 +9,7 @@ import Certifications from '../components/portfolio/Certifications';
 import GeminiChat from '../components/portfolio/GeminiChat';
 import Contact from '../components/portfolio/Contact';
 import Footer from '../components/portfolio/Footer';
+import ScrollToTop from '../components/portfolio/ScrollToTop';
 
 const PortfolioPage: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const PortfolioPage: React.FC = () => {
         <Contact />
       </main>
       <Footer />
+      <ScrollToTop />
     </div>
   );
 };

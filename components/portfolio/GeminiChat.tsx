@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import type { ChatMessage } from '../../types';
 import { generateChatResponse } from '../../services/geminiService';
 import { useScrollAnimation, sectionVariants, itemVariants } from '../../hooks/useScrollAnimation';
@@ -16,7 +16,12 @@ const GeminiChat: React.FC = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    useEffect(scrollToBottom, [messages]);
+    useEffect(() => {
+        // Only scroll to the bottom if there are messages to prevent scrolling on initial load.
+        if (messages.length > 0) {
+            scrollToBottom();
+        }
+    }, [messages]);
 
     const handleSend = async () => {
         if (!input.trim() || isLoading) return;
@@ -42,23 +47,40 @@ const GeminiChat: React.FC = () => {
             initial="hidden"
             animate={controls}
         >
-            <motion.h2 variants={itemVariants} className="text-3xl font-bold text-text-light mb-12 text-center">
+            <motion.h2 variants={itemVariants} className="text-3xl md:text-4xl font-bold text-text-light mb-12 text-center">
                 Chat with my AI Assistant
             </motion.h2>
-            <motion.div variants={itemVariants} className="max-w-2xl mx-auto bg-primary rounded-lg shadow-xl flex flex-col h-[60vh]">
+            <motion.div variants={itemVariants} className="max-w-2xl mx-auto bg-primary rounded-lg shadow-xl flex flex-col h-[60vh] max-h-[700px]">
                 <div className="flex-grow p-4 overflow-y-auto">
                     {messages.length === 0 ? (
                         <div className="flex justify-center items-center h-full">
                             <p className="text-text-muted">Ask me anything about my portfolio!</p>
                         </div>
                     ) : (
-                        messages.map((msg, index) => (
-                            <div key={index} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'} mb-4`}>
-                                <div className={`max-w-xs md:max-w-md p-3 rounded-lg ${msg.sender === 'user' ? 'bg-accent text-white' : 'bg-gray-700 text-text-normal'}`}>
-                                    <p style={{whiteSpace: 'pre-wrap'}}>{msg.text}</p>
-                                </div>
-                            </div>
-                        ))
+                        <AnimatePresence>
+                            {messages.map((msg, index) => (
+                                <motion.div
+                                    key={index}
+                                    layout
+                                    initial={{ opacity: 0, scale: 0.8, y: 50 }}
+                                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                                    exit={{ opacity: 0, scale: 0.8 }}
+                                    transition={{
+                                        opacity: { duration: 0.2 },
+                                        layout: {
+                                            type: "spring",
+                                            bounce: 0.4,
+                                            duration: 0.4
+                                        }
+                                    }}
+                                    className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'} mb-4`}
+                                >
+                                    <div className={`max-w-xs md:max-w-md p-3 rounded-lg ${msg.sender === 'user' ? 'bg-accent text-white' : 'bg-gray-700 text-text-normal'}`}>
+                                        <p style={{whiteSpace: 'pre-wrap'}}>{msg.text}</p>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
                     )}
                     {isLoading && (
                         <div className="flex justify-start mb-4">

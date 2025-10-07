@@ -16,7 +16,7 @@ const Certifications: React.FC = () => {
             initial="hidden"
             animate={controls}
         >
-            <motion.h2 variants={itemVariants} className="text-3xl font-bold text-text-light mb-12 text-center">
+            <motion.h2 variants={itemVariants} className="text-3xl md:text-4xl font-bold text-text-light mb-12 text-center">
                 Certifications
             </motion.h2>
             <div className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -25,6 +25,11 @@ const Certifications: React.FC = () => {
                         key={index}
                         variants={itemVariants}
                         className="bg-primary p-4 rounded-lg shadow-lg flex justify-between items-center"
+                        whileHover={{
+                            scale: 1.03,
+                            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        }}
+                        transition={{ type: 'spring', stiffness: 300 }}
                     >
                         <div>
                             <h3 className="font-bold text-text-light">{cert.name}</h3>

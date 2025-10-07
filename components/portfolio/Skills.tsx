@@ -80,7 +80,7 @@ const Skills: React.FC = () => {
             initial="hidden"
             animate={controls}
         >
-            <motion.h2 variants={mainItemVariants} className="text-3xl font-bold text-text-light mb-12 text-center">
+            <motion.h2 variants={mainItemVariants} className="text-3xl md:text-4xl font-bold text-text-light mb-12 text-center">
                 My Skills
             </motion.h2>
             

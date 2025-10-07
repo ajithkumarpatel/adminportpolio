@@ -15,7 +15,7 @@ const About: React.FC = () => {
             initial="hidden"
             animate={controls}
         >
-            <motion.h2 variants={itemVariants} className="text-3xl font-bold text-text-light mb-8 text-center">
+            <motion.h2 variants={itemVariants} className="text-3xl md:text-4xl font-bold text-text-light mb-12 text-center">
                 About Me
             </motion.h2>
             <div className="grid md:grid-cols-3 gap-12 items-center">
@@ -25,11 +25,26 @@ const About: React.FC = () => {
                     ))}
                 </motion.div>
                 <motion.div variants={itemVariants} className="md:col-span-1 flex justify-center">
-                    <div className="relative w-64 h-64 group">
-                        <div className="absolute w-full h-full rounded-md border-2 border-accent top-4 left-4 transition-transform duration-300 group-hover:top-2 group-hover:left-2"></div>
-                        <div className="relative w-full h-full rounded-md overflow-hidden">
-                            <div className="absolute inset-0 bg-accent/30 group-hover:bg-transparent transition-colors duration-300"></div>
-                            <img src={USER_INFO.profileImage} alt={USER_INFO.name} className="w-full h-full object-cover"/>
+                     <div className="relative w-56 h-56 md:w-64 md:h-64 group mx-auto">
+                        <motion.div 
+                            className="absolute w-full h-full rounded-md border-2 border-accent"
+                            initial={{ top: '1rem', left: '1rem' }}
+                            whileHover={{ top: '0.5rem', left: '0.5rem' }}
+                            transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+                        />
+                        <div className="relative w-full h-full rounded-md overflow-hidden shadow-lg">
+                            <motion.div 
+                                className="absolute inset-0 bg-accent/30"
+                                whileHover={{ backgroundColor: 'rgba(59, 130, 246, 0)' }}
+                                transition={{ duration: 0.4 }}
+                            />
+                            <motion.img 
+                                src={USER_INFO.profileImage} 
+                                alt={USER_INFO.name} 
+                                className="w-full h-full object-cover"
+                                whileHover={{ scale: 1.1 }}
+                                transition={{ duration: 0.4, ease: 'easeInOut' }}
+                            />
                         </div>
                     </div>
                 </motion.div>

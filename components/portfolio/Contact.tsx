@@ -1,120 +1,41 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useScrollAnimation, sectionVariants, itemVariants } from '../../hooks/useScrollAnimation';
 import { db, collection, addDoc, serverTimestamp } from '../../services/firebase';
 
-type FormStatus = 'idle' | 'loading' | 'success' | 'error';
-type StatusMessage = {
-    type: FormStatus;
-    text: string;
-} | null;
-
-/**
- * Wraps a promise with a timeout.
- * @param promise The promise to wrap.
- * @param ms The timeout duration in milliseconds.
- * @param timeoutError The error to reject with on timeout.
- * @returns A new promise that races the original promise against the timeout.
- */
-// FIX: Add generic type parameter <T> to declare it for use in the function signature. A trailing comma is used to avoid ambiguity with JSX syntax.
-const promiseWithTimeout = <T,>(promise: Promise<T>, ms: number, timeoutError = new Error('Request timed out')): Promise<T> => {
-  return new Promise((resolve, reject) => {
-    const timeoutId = setTimeout(() => {
-      reject(timeoutError);
-    }, ms);
-
-    promise.then(
-      (res) => {
-        clearTimeout(timeoutId);
-        resolve(res);
-      },
-      (err) => {
-        clearTimeout(timeoutId);
-        reject(err);
-      }
-    );
-  });
-};
-
-
 const Contact: React.FC = () => {
     const [ref, controls] = useScrollAnimation();
-    const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-    const [status, setStatus] = useState<FormStatus>('idle');
-    const [statusMessage, setStatusMessage] = useState<StatusMessage>(null);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-    };
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [message, setMessage] = useState('');
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setStatus('loading');
-        setStatusMessage(null);
-
-        // 1. Check for Firebase connection
-        if (!db) {
-            console.error("Firebase is not initialized.");
-            setStatusMessage({ type: 'error', text: "Server connection failed. Please try again later." });
-            setStatus('error');
-            return;
-        }
-
-        // 2. Basic validation
-        if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
-            setStatusMessage({ type: 'error', text: "Please fill out all fields." });
-            setStatus('idle'); // Revert status to allow another attempt
-            return;
-        }
+        
+        // Ensure no fields are undefined before sending to Firestore.
+        const dataToSend = {
+            name: name || '',
+            email: email || '',
+            message: message || '',
+            timestamp: serverTimestamp()
+        };
 
         try {
-            // 3. Create the submission promise
-            const submissionPromise = addDoc(collection(db, 'contacts'), {
-                name: formData.name,
-                email: formData.email,
-                message: formData.message,
-                timestamp: serverTimestamp(),
-                read: false
-            });
-
-            // 4. Submit to Firebase with a 15-second timeout
-            await promiseWithTimeout(submissionPromise, 15000);
-
+            if (!db) {
+                throw new Error("Firestore is not initialized. Please check your Firebase configuration in services/firebase.ts");
+            }
+            await addDoc(collection(db, 'contacts'), dataToSend);
             setStatus('success');
-            setStatusMessage({ type: 'success', text: "Message sent successfully! Thank you." });
-            setFormData({ name: '', email: '', message: '' }); // Clear form
-            setTimeout(() => {
-                setStatus('idle');
-                setStatusMessage(null);
-            }, 5000);
+            setName('');
+            setEmail('');
+            setMessage('');
+            setTimeout(() => setStatus('idle'), 5000);
         } catch (error) {
-            // 5. Handle submission errors with more specific feedback
             console.error("Error adding document: ", error);
             setStatus('error');
-            
-            let message = "Failed to send message. Please try again later.";
-
-            if (error instanceof Error && error.message === 'Request timed out') {
-                 message = "Submission timed out. Please check your connection.";
-            // Check for Firebase-specific error codes
-            } else if (error && typeof error === 'object' && 'code' in error) {
-                const firebaseError = error as { code: string; message: string };
-                if (firebaseError.code === 'permission-denied') {
-                    message = "Submission failed: Permission denied. Please check Firestore security rules.";
-                } else if (firebaseError.code === 'unavailable') {
-                    message = "The service is currently unavailable. Please try again later.";
-                } else {
-                    message = `An error occurred: ${firebaseError.message}`;
-                }
-            }
-            
-            setStatusMessage({ type: 'error', text: message });
-            
-             setTimeout(() => {
-                setStatus('idle');
-                setStatusMessage(null);
-            }, 8000); // Increased timeout to allow user to read the message
+            setTimeout(() => setStatus('idle'), 5000);
         }
     };
 
@@ -136,58 +57,79 @@ const Contact: React.FC = () => {
             <motion.form 
                 variants={itemVariants} 
                 onSubmit={handleSubmit} 
-                className="max-w-xl mx-auto space-y-4"
-                noValidate // Disable native validation to use our own
+                className="max-w-xl mx-auto space-y-8"
             >
-                <div>
+                <div className="relative">
                     <input 
                         type="text" 
-                        name="name"
-                        placeholder="Name"
-                        value={formData.name}
-                        onChange={handleChange}
+                        id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                         required
-                        className="w-full px-4 py-3 bg-primary text-text-light rounded border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent" 
+                        className="peer w-full px-4 py-3 bg-primary text-text-light rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent transition-colors placeholder-transparent"
+                        placeholder="Name"
                     />
+                    <label htmlFor="name" className="absolute left-4 -top-3.5 text-text-muted text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-text-normal peer-placeholder-shown:top-3.5 peer-focus:-top-3.5 peer-focus:text-accent peer-focus:text-sm">Name</label>
                 </div>
-                <div>
+                 <div className="relative">
                     <input 
                         type="email" 
-                        name="email"
-                        placeholder="Email"
-                        value={formData.email}
-                        onChange={handleChange}
+                        id="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         required
-                        className="w-full px-4 py-3 bg-primary text-text-light rounded border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent" 
+                        className="peer w-full px-4 py-3 bg-primary text-text-light rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent transition-colors placeholder-transparent"
+                        placeholder="Email"
                     />
+                     <label htmlFor="email" className="absolute left-4 -top-3.5 text-text-muted text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-text-normal peer-placeholder-shown:top-3.5 peer-focus:-top-3.5 peer-focus:text-accent peer-focus:text-sm">Email</label>
                 </div>
-                <div>
+                <div className="relative">
                     <textarea 
-                        name="message"
+                        id="message"
                         placeholder="Message"
-                        value={formData.message}
-                        onChange={handleChange}
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
                         required
                         rows={5}
-                        className="w-full px-4 py-3 bg-primary text-text-light rounded border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent" 
+                        className="peer w-full px-4 py-3 bg-primary text-text-light rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent transition-colors placeholder-transparent" 
                     ></textarea>
+                    <label htmlFor="message" className="absolute left-4 -top-3.5 text-text-muted text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-text-normal peer-placeholder-shown:top-3.5 peer-focus:-top-3.5 peer-focus:text-accent peer-focus:text-sm">Message</label>
                 </div>
                 <div className="text-center">
-                    <button 
+                    <motion.button 
                         type="submit" 
                         disabled={status === 'loading'}
-                        className="px-8 py-3 bg-accent text-white rounded hover:bg-blue-500 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
+                        className="px-8 py-3 bg-accent text-white rounded-md hover:bg-blue-500 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                     >
                         {status === 'loading' ? 'Sending...' : 'Send Message'}
-                    </button>
+                    </motion.button>
                 </div>
             </motion.form>
-            <div className="mt-6 text-center min-h-[1.5rem]"> {/* Use min-h to prevent layout shift */}
-                {statusMessage && (
-                    <p className={`${statusMessage.type === 'success' ? 'text-green-400' : 'text-red-400'}`}>
-                        {statusMessage.text}
-                    </p>
-                )}
+            <div className="mt-6 text-center h-6">
+                <AnimatePresence>
+                    {status === 'success' && (
+                        <motion.p 
+                            className="text-green-400"
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 10 }}
+                        >
+                            Message sent successfully! Thank you.
+                        </motion.p>
+                    )}
+                    {status === 'error' && (
+                        <motion.p 
+                            className="text-red-400"
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 10 }}
+                        >
+                            Something went wrong. Please try again.
+                        </motion.p>
+                    )}
+                </AnimatePresence>
             </div>
         </motion.section>
     );

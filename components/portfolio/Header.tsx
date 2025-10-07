@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { USER_INFO } from '../../constants';
 
 const navLinks = [
@@ -14,13 +15,38 @@ const navLinks = [
 const Header: React.FC = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [activeSection, setActiveSection] = useState<string>('');
 
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 50);
         };
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+    
+    useEffect(() => {
+        const sections = navLinks.map(link => document.querySelector(link.href));
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        setActiveSection(`#${entry.target.id}`);
+                    }
+                });
+            },
+            { rootMargin: '-30% 0px -70% 0px' }
+        );
+
+        sections.forEach(section => {
+            if (section) observer.observe(section);
+        });
+
+        return () => {
+            sections.forEach(section => {
+                if (section) observer.unobserve(section);
+            });
+        };
     }, []);
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -61,14 +87,22 @@ const Header: React.FC = () => {
                 {/* Desktop Nav */}
                 <ul className="hidden md:flex items-center space-x-8">
                     {navLinks.map((link) => (
-                        <li key={link.name}>
+                        <li key={link.name} className="relative">
                             <a 
                                 href={link.href}
                                 onClick={(e) => handleNavClick(e, link.href)}
-                                className="text-text-normal hover:text-accent transition-colors duration-300 cursor-pointer"
+                                className={`transition-colors duration-300 ${activeSection === link.href ? 'text-accent' : 'text-text-normal hover:text-accent'}`}
                             >
                                 {link.name}
                             </a>
+                            {activeSection === link.href && (
+                                <motion.div
+                                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-accent"
+                                    layoutId="underline"
+                                    initial={false}
+                                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                                />
+                            )}
                         </li>
                     ))}
                 </ul>
@@ -86,21 +120,31 @@ const Header: React.FC = () => {
             </nav>
 
             {/* Mobile Menu */}
-            <div className={`fixed top-0 right-0 h-full w-3/4 bg-primary shadow-xl transform transition-transform duration-300 ease-in-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'} md:hidden`}>
-                <ul className="flex flex-col items-center justify-center h-full space-y-8">
-                    {navLinks.map((link) => (
-                        <li key={link.name}>
-                            <a 
-                                href={link.href}
-                                onClick={(e) => handleNavClick(e, link.href)}
-                                className="text-2xl text-text-light hover:text-accent transition-colors duration-300 cursor-pointer"
-                            >
-                               {link.name}
-                            </a>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+            <AnimatePresence>
+                {isMenuOpen && (
+                     <motion.div 
+                        className="fixed top-0 right-0 h-full w-3/4 bg-primary shadow-xl md:hidden"
+                        initial={{ x: '100%' }}
+                        animate={{ x: 0 }}
+                        exit={{ x: '100%' }}
+                        transition={{ type: 'tween', ease: 'easeInOut', duration: 0.3 }}
+                    >
+                        <ul className="flex flex-col items-center justify-center h-full space-y-8">
+                            {navLinks.map((link) => (
+                                <li key={link.name}>
+                                    <a 
+                                        href={link.href}
+                                        onClick={(e) => handleNavClick(e, link.href)}
+                                        className="text-2xl text-text-light hover:text-accent transition-colors duration-300 cursor-pointer"
+                                    >
+                                       {link.name}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </header>
     );
 };

@@ -1,26 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Portfolio Admin Panel</title>
+    <title>Ajith Kumar's Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
             colors: {
-              'dark-bg': '#111827',
-              'primary': '#1F2937',
-              'accent': '#3B82F6',
-              'text-light': '#F9FAFB',
-              'text-normal': '#D1D5DB',
-              'text-muted': '#9CA3AF',
+              'dark-bg': '#111827', // A dark slate gray
+              'primary': '#1F2937', // A slightly lighter gray for cards
+              'accent': '#3B82F6', // A bright blue for highlights
+              'text-light': '#F9FAFB', // For main headings
+              'text-normal': '#D1D5DB', // For body text
+              'text-muted': '#9CA3AF', // For less important text
             },
             fontFamily: {
                 sans: ['Inter', 'sans-serif'],
                 mono: ['Fira Code', 'monospace']
+            },
+            animation: {
+              'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+            },
+            keyframes: {
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
             },
           }
         }
@@ -29,20 +38,37 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script type="importmap">
+    <style>
+      /* Custom Scrollbar for Webkit browsers */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #111827; /* dark-bg */
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #3B82F6; /* accent */
+        border-radius: 5px;
+        border: 2px solid #111827; /* dark-bg */
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #2563EB;
+      }
+    </style>
+  <script type="importmap">
 {
   "imports": {
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
     "react": "https://aistudiocdn.com/react@^19.2.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "firebase/": "https://aistudiocdn.com/firebase@^12.3.0/",
     "@google/genai": "https://aistudiocdn.com/@google/genai@^1.22.0",
+    "react-intersection-observer": "https://aistudiocdn.com/react-intersection-observer@^9.16.0",
     "framer-motion": "https://aistudiocdn.com/framer-motion@^12.23.22",
-    "react-intersection-observer": "https://aistudiocdn.com/react-intersection-observer@^9.16.0"
+    "firebase/": "https://aistudiocdn.com/firebase@^12.3.0/"
   }
 }
 </script>
-  <link rel="stylesheet" href="/index.css">
+<link rel="stylesheet" href="/index.css">
 </head>
   <body class="bg-dark-bg text-text-normal">
     <div id="root"></div>
