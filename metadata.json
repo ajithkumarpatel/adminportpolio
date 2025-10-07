@@ -1,0 +1,5 @@
+{
+  "name": "Copy of Portfolio Admin Panel",
+  "description": "A standalone, password-protected admin page to view contact messages submitted through the portfolio website, built with React, TypeScript, and Firebase.",
+  "requestFramePermissions": []
+}
