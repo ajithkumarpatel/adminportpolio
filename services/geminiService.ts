@@ -1,25 +1,25 @@
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 
-// IMPORTANT: Ensure your API key is set in your environment variables.
-// In a real frontend project, this key should be handled securely, typically
-// by making requests through a backend proxy to avoid exposing the key in client-side code.
+let ai: GoogleGenAI | null = null;
 const API_KEY = process.env.API_KEY;
 
-if (!API_KEY) {
-  console.warn("Gemini API key not found. Please set the API_KEY environment variable.");
+if (API_KEY) {
+  try {
+    ai = new GoogleGenAI({ apiKey: API_KEY });
+  } catch (error) {
+    console.error("Failed to initialize GoogleGenAI:", error);
+    ai = null;
+  }
+} else {
+  console.warn("Gemini API key not found. Please set the API_KEY environment variable in your Vercel project settings. The chat feature will be disabled.");
 }
-
-const ai = new GoogleGenAI({ apiKey: API_KEY });
 
 const systemInstruction = `You are a friendly and helpful AI assistant for Ajith Kumar's personal portfolio website. Your goal is to answer questions about Ajith, his skills, projects, and experience based on the context of a software developer portfolio. Be professional, concise, and encourage users to get in touch with Ajith via the contact form for more detailed inquiries. Do not make up information that is not typically found in a portfolio. Keep your answers conversational and brief.`;
 
 
 export const generateChatResponse = async (prompt: string): Promise<string> => {
-  if (!API_KEY) {
-    // Return a mock response if API key is not available
-    return new Promise((resolve) =>
-      setTimeout(() => resolve("This is a mock response because the Gemini API key is not configured. Please set it in your environment variables to get live responses."), 1000)
-    );
+  if (!ai) {
+    return "The AI chat is currently disabled because the API key is not configured on the server. Please contact the site owner.";
   }
 
   try {

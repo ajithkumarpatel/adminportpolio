@@ -20,7 +20,7 @@ const AdminPage: React.FC = () => {
                 <AdminDashboard />
             )}
             
-            <a href="#portfolio" className="text-xs text-gray-600 mt-8 hover:text-accent">Back to Portfolio</a>
+            <a href="/" className="text-xs text-text-muted mt-8 hover:text-accent transition-colors">Back to Portfolio</a>
         </div>
     );
 };

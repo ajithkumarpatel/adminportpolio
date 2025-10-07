@@ -5,6 +5,7 @@ interface AdminLoginProps {
 }
 
 // In a real application, this should be handled securely on a server.
+// For this portfolio, the password is hardcoded for simplicity.
 const ADMIN_PASSWORD = 'password123';
 
 const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
@@ -43,7 +44,6 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                     Login
                 </button>
             </form>
-             <p className="text-xs text-text-muted text-center mt-4">Hint: The password is 'password123'</p>
         </div>
     );
 };
